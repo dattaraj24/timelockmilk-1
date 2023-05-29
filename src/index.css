@@ -5,6 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #e9e1fd;
 }
 
 code {
@@ -13,12 +14,12 @@ code {
 }
 
 .wrapper {
+  background-color: #ffffff;
   position: absolute;
   top: 0;
   left: 0;
   width: 100vw;
   min-height: 100vh;
-  background: url('./assets/bg.png');
   background-position: center;
   background-repeat: repeat;
 
@@ -38,6 +39,7 @@ code {
 .hero-img1 {
   height: 350px;
   margin-top: 50px;
+  padding-top: 50px
 }
 
 .hero-img2 {
@@ -83,8 +85,8 @@ code {
 }
 
 .card-img {
-  height: 150px;
-  margin: 10px 0;
+  height: 300px;
+  width: 20px;
 }
 
 .card-heading {
@@ -270,6 +272,21 @@ code {
   padding: 10.5px;
   outline: none;
   border: none;
+}
+
+.card-stake-milk {
+  background: linear-gradient(180deg, #7834f3 0%, #411196 100%);
+  border-radius: 5px;
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+  color: #e9e1fd;
+  padding: 10.5px;
+  outline: none;
+  border: none;
+  
 }
 
 .card-stake-unstake {

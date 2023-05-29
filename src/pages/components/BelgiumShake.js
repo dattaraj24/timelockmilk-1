@@ -1,12 +1,129 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import {ethers} from "ethers"
+import { erc20ABI } from "wagmi";
+import { useAccount, useConnect } from 'wagmi'
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const BelgiumShake = ({ cardClicked, setCardClicked, isMobile, cardInfo }) => {
   const [stakeDetailsClicked, setStakeDetailsClicked] = useState(false);
+  const { connector: activeConnector, isConnected } = useAccount()
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [stakedAmount, setStakedAmount] = useState([]);
+  const [count, setCount] = useState(0);
+  const [balance , setbalance] = useState(0);
+  const [inputValue, setInputValue] = useState('');
+  const [isclaim, setIsClaimable] = useState([]);
+
+
+
+
+  function handleInputChange(event) {
+    setInputValue(event.target.value);
+  }
+  
+
+
+  const timelockABI =[{"inputs":[{"internalType":"address","name":"_token","type":"address"},{"internalType":"uint256","name":"_stakingDuration","type":"uint256"},{"internalType":"uint256","name":"_apy","type":"uint256"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"RewardClaimed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Unstaked","type":"event"},{"inputs":[],"name":"apy","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_address","type":"address"}],"name":"getpools","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_address","type":"address"},{"internalType":"uint256","name":"poolindex","type":"uint256"}],"name":"getpoolsinfo","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_address","type":"address"},{"internalType":"uint256","name":"index","type":"uint256"}],"name":"getreward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_address","type":"address"},{"internalType":"uint256","name":"poolindex","type":"uint256"}],"name":"getrewardinfo","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"gettokenbalance","outputs":[{"internalType":"uint256","name":"_rewards","type":"uint256"},{"internalType":"uint256","name":"staked","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_address","type":"address"}],"name":"gettotalreward","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_address","type":"address"},{"internalType":"uint256","name":"poolindex","type":"uint256"}],"name":"isClaimable","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"rewards","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"stake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"stakingDuration","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"token","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"topUp","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_poolIndex","type":"uint256"}],"name":"unstake","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"}],"name":"userPools","outputs":[{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"startTime","type":"uint256"}],"stateMutability":"view","type":"function"}]
+
+
+  
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+const signer = provider.getSigner();
+const getRewards =async () => {
+  const address = await signer.getAddress();
+  const timelockContract = new ethers.Contract("0xf06C274DC90a8295A0B9C94F149851F36493B5df", timelockABI, signer);
+  const _reward = await timelockContract.getpools(address);
+  const reward = ethers.BigNumber.from(_reward).toString()
+  console.log(reward)
+  setCount(reward)
+
+}
+const getBalance = async () => {
+  const address = await signer.getAddress();
+  const tokenContract = new ethers.Contract("0xc9bcf3f71e37579a4a42591b09c9dd93dfe27965", erc20ABI, signer);
+  const balance = await tokenContract.balanceOf(address);
+  
+  const milk = ethers.utils.formatUnits(balance, 18);
+  setbalance(milk);
+}
+
+async function getUserPools() {
+  const address = await signer.getAddress();
+  const timelockContract = new ethers.Contract(
+    "0xf06C274DC90a8295A0B9C94F149851F36493B5df",
+    timelockABI,
+    signer
+  );
+
+  const amounts = await Promise.all(
+    Array.from({ length: count }).map((_, index) =>
+      timelockContract.getpoolsinfo(address, index),
+     
+    )
+  );
+
+  const claimable = await Promise.all(
+      Array.from({ length: count }).map((_, index) =>
+         timelockContract.isClaimable(address, index)
+      )
+    );
+
+  const parsedAmounts = amounts.map((amount) =>
+    ethers.utils.formatUnits(amount.toString(), 18)
+  );
+
+
+  setIsClaimable(claimable);
+  setStakedAmount(parsedAmounts);
+}
+useEffect( () => {
+
+  const fetch = async () => {
+   await getRewards()
+   await getBalance()
+   await getUserPools()
+  }
+  if(isConnected){
+    fetch()
+    }
+
+
+}, [count]);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleUnstake = () => {
+    setStakedAmount(0);
+  };
+
+
+
+
+   const stake = async (amount) => {
+    const timelockContract = new ethers.Contract("0xf06C274DC90a8295A0B9C94F149851F36493B5df", timelockABI, signer);
+    const tokencontract = new ethers.Contract("0xc9bcf3f71e37579a4a42591b09c9dd93dfe27965", erc20ABI, signer);
+    const approve = await tokencontract.approve("0xf06C274DC90a8295A0B9C94F149851F36493B5df" , amount);
+    await approve.wait()
+    alert("approved")
+    const tx = await timelockContract.stake(amount);
+    await tx.wait();
+    alert("Staked", amount, "tokens");
+  }
+  
+  // Function to unstake tokens from a specific pool index
+  const unstake =async (poolIndex) => {
+    const timelockContract = new ethers.Contract("0xf06C274DC90a8295A0B9C94F149851F36493B5df", timelockABI, signer);
+    const tx = await timelockContract.unstake(poolIndex);
+    await tx.wait();
+    alert("Unstaked tokens from pool", poolIndex);
+  }
 
   cardInfo[2].stakes = [
     {
       number: 1,
-      amount: 1000
+      amount: 10000
     },
     {
       number: 2,
@@ -43,8 +160,9 @@ const BelgiumShake = ({ cardClicked, setCardClicked, isMobile, cardInfo }) => {
             {cardInfo[2].percentage}
           </div>
         </div>
-        {cardClicked === cardInfo[2].number
-          ? <div className="card-row">
+        {cardClicked === cardInfo[2].number && isConnected
+          ?
+            <div className="card-row">
               <div className="card-stake-div">
                 <input
                   type="number"
@@ -53,6 +171,8 @@ const BelgiumShake = ({ cardClicked, setCardClicked, isMobile, cardInfo }) => {
                     border: "2px solid",
                     borderColor: cardInfo[2].color
                   }}
+                  value={inputValue}
+                  onChange={handleInputChange}
                 />
                 <button
                   className="card-stake-button"
@@ -61,10 +181,14 @@ const BelgiumShake = ({ cardClicked, setCardClicked, isMobile, cardInfo }) => {
                     border: "2px solid",
                     borderColor: cardInfo[2].color
                   }}
+                  onClick={
+                    () => stake(ethers.utils.parseUnits(inputValue, 18))
+                  }
                 >
                   STAKE
                 </button>
               </div>
+              <p className="card-stake-amount">milk  :{balance}</p>
               <div
                 className="card-stake-details"
                 onClick={() => setStakeDetailsClicked(!stakeDetailsClicked)}
@@ -97,44 +221,42 @@ const BelgiumShake = ({ cardClicked, setCardClicked, isMobile, cardInfo }) => {
                     </svg>}
               </div>
             </div>
-          : ""}
+          : <ConnectButton showBalance={false} />}
       </div>
       {cardClicked === cardInfo[2].number && stakeDetailsClicked
         ? <div className="card-stakes">
-            {cardInfo[2].stakes.length !== 0
-              ? cardInfo[2].stakes.map((stake, index) => {
-                  return (
+           {Array.from({ length: count }).map((_, index) => (
+                  
                     <div className="card-stake">
                       <div className="card-stake-number">
-                        Stake {stake.number}:
+                        Stake{count[index]}
                       </div>
                       <div className="card-stake-middle">
                         <div className="card-stake-amount">
-                          {stake.amount}
+                        {stakedAmount[index]}
                         </div>
-                        <button
+                      
+                      </div>
+                      {isclaim[index] ?  <button
                           className="card-stake-claim"
-                          onClick={() =>
-                            alert(
-                              `Claiming ${stake.amount} from ${index + 1} Stake`
-                            )}
+                          onClick={
+                            () =>
+                            unstake(index)}
                         >
                           Claim
-                        </button>
-                      </div>
+                        </button> :
                       <button
                         className="card-stake-unstake"
                         onClick={() =>
-                          alert(
-                            `Unstaking ${stake.amount} from ${index + 1} Stake`
-                          )}
+                           unstake(index)}
                       >
                         Unstake
                       </button>
+}
                     </div>
-                  );
-                })
-              : ""}
+                  
+                  ))}
+
           </div>
         : ""}
       {cardClicked === cardInfo[2].number
@@ -150,7 +272,7 @@ const BelgiumShake = ({ cardClicked, setCardClicked, isMobile, cardInfo }) => {
                 setCardClicked(cardInfo[2].number);
               }}
             >
-              CLAIM NOW
+              STAKE NOW
             </button>
           </div>}
     </div>

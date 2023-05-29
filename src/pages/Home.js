@@ -7,7 +7,9 @@ import cardimg3 from "../assets/card-img3.png";
 import VanillaShake from "./components/VanillaShake";
 import StrawberryShake from "./components/StrawberryShake";
 import BelgiumShake from "./components/BelgiumShake";
-
+import Header from "./common/header/Header";
+import MobileFooter from './common/footer/MobileFooter';
+import Footer from './common/footer/Footer';
 const Home = ({ isMobile }) => {
   const [cardClicked, setCardClicked] = useState(0);
 
@@ -42,10 +44,11 @@ const Home = ({ isMobile }) => {
   ];
 
   return (
+    <>
+
     <div className="wrapper">
-      <div className="heading" style={isMobile ? { fontSize: "36px" } : {}}>
-        Time Locking Stacking Contract
-      </div>
+    <Header/>
+ 
       <img
         className="hero-img1"
         style={isMobile ? { height: "200px" } : {}}
@@ -83,8 +86,14 @@ const Home = ({ isMobile }) => {
           isMobile={isMobile}
           cardInfo={cardsInfo}
         />
+        
       </div>
+      <p>Note: if you unstake your tokens before completing the claim period you will not get the APR rewards</p>
+      <MobileFooter/>
+   <Footer/>
     </div>
+   
+    </>
   );
 };
 
