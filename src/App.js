@@ -67,9 +67,10 @@ function App() {
     <WagmiConfig client={client}>
       <RainbowKitProvider chains={chains}>
       <div className="wrapper">
-      <BrowserRouter>
+      <BrowserRouter basename="/stake">
         <Routes>
           <Route path="/" element={<Home isMobile={isMobile} />} />
+          <Route path="/stake" element={<Home isMobile={isMobile} />} />
         </Routes>
       </BrowserRouter>
     </div>

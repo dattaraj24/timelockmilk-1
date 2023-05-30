@@ -27,12 +27,12 @@ const Nav = () => {
       
           <ul className="axil-submenu">
             <li>
-              <a href="https://v2exchange.milkshakeswap.finance/#/swap" target="_parent">
+              <a href="https://milkshakeswap.finance/swap/#/swap" target="_parent">
                 Exchange
               </a>
             </li>
             <li>
-              <a href="https://v2exchange.milkshakeswap.finance/#/pool" target="_parent">
+              <a href="https://milkshakeswap.finance/swap/#/pool" target="_parent">
                 Liquidity
               </a>
             </li>
@@ -45,7 +45,7 @@ const Nav = () => {
         <a target="_parent" href="https://milkshakeswap.finance/pool" >Flavour Pool</a>
         </li>
         <li>
-        <a target="_parent" href="https://staking.milkshakeswap.finance" >
+        <a target="_parent" href="https://milkshakeswap.finance/stake" >
                 staking
               </a>
         </li>

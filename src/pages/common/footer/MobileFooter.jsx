@@ -47,7 +47,7 @@ const MobileFooter = () => {
             </a>
         </li>
         <li className="mobile-nav-li">
-            <a href="https://staking.milkshakeswap.finance" target="_parent">
+            <a href="https://milkshakeswap.finance/stake" target="_parent">
             <img src={lotto} alt="home" className="menu-img" />
             <div style={{ fontSize: "8px" }}>Staking</div>
             </a>
@@ -64,12 +64,12 @@ const MobileFooter = () => {
       {open ? (
         <nav className="mobile-nav2">
           <li className="open-li">
-            <a href="https://v2exchange.milkshakeswap.finance/#/swap" target="_parent">
+            <a href="https://milkshakeswap.finance/swap/#/swap" target="_parent">
               Exchange
             </a>
           </li>
           <li className="open-li">
-            <a href="https://v2exchange.milkshakeswap.finance/#/pool" target="_parent">
+            <a href="https://milkshakeswap.finance/swap/#/pool" target="_parent">
               Liquidity
             </a>
           </li>

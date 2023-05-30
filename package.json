@@ -2,6 +2,7 @@
   "name": "timelockmilk",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/stake",
   "dependencies": {
     "@rainbow-me/rainbowkit": "^0.12.12",
     "@testing-library/jest-dom": "^5.16.5",

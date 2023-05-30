@@ -51,7 +51,7 @@ const Header = () => {
                       <ul className="axil-submenu">
                         <li>
                           <a
-                            href="https://v2exchange.milkshakeswap.finance/#/swap"
+                            href="https://milkshakeswap.finance/swap/#/swap"
                             target="_blank"
                           >
                             Exchange
@@ -59,7 +59,7 @@ const Header = () => {
                         </li>
                         <li>
                           <a
-                            href="https://v2exchange.milkshakeswap.finance/#/pool"
+                            href="https://milkshakeswap.finance/swap/#/pool"
                             target="_blank"
                           >
                             Liquidity
@@ -78,7 +78,7 @@ const Header = () => {
                       </Link>
                     </li>
                     <li>
-                    <a href="https://staking.milkshakeswap.finance" target="_blank">
+                    <a href="https://milkshakeswap.finance/stake" target="_blank">
                 Staking
               </a>
                     </li>
